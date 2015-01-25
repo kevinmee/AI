@@ -1,15 +1,14 @@
-package referee;
+package player;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
+public class ConnectN_player {
 
-public class TestPlayer {
-
-	String playerName="aa";
+	String playerName="This is our player name!";
 	BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 	boolean first_move=false;
 	
@@ -35,7 +34,7 @@ public class TestPlayer {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		TestPlayer rp=new TestPlayer();
+		ConnectN_player rp=new ConnectN_player();
 		System.out.println(rp.playerName);
 		while (true){
 			rp.processInput();
@@ -43,4 +42,6 @@ public class TestPlayer {
 
 	}
 
+	
+	
 }
