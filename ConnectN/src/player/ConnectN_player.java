@@ -8,9 +8,15 @@ import java.util.List;
 
 public class ConnectN_player {
 
-	String playerName="This is our player name!";
+	int boardHeight;
+	int boardWidth;
+	int N;
+	int playerTurn;
+	int timeLimit;
+	
+	String playerName = "This is our player name!";
 	BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-	boolean first_move=false;
+	boolean first_move = false;
 	
 	public void processInput() throws IOException{	
 	
@@ -33,9 +39,23 @@ public class ConnectN_player {
 			System.out.println("not what I want");
 	}
 	
+	public void readConfig() throws IOException {
+		String config = input.readLine();
+		List<String> vals = Arrays.asList(config.split(" "));
+		
+		this.boardHeight = Integer.parseInt(vals.get(0));
+		this.boardWidth = Integer.parseInt(vals.get(1));
+		this.N = Integer.parseInt(vals.get(2));
+		this.playerTurn = Integer.parseInt(vals.get(3));
+		this.timeLimit = Integer.parseInt(vals.get(4));
+	}
+	
 	public static void main(String[] args) throws IOException {
-		ConnectN_player rp=new ConnectN_player();
+		ConnectN_player rp = new ConnectN_player();
 		System.out.println(rp.playerName);
+		
+		rp.readConfig();
+		
 		while (true){
 			rp.processInput();
 		}
