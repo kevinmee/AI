@@ -6,6 +6,7 @@ public class ConnectNNode {
 
 	ConnectNNode state;
 	int player;
+	List<ConnectNNode> children;
 
 	public ConnectNNode() {
 
