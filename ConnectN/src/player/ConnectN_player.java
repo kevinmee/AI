@@ -19,6 +19,8 @@ public class ConnectN_player {
 	int timeLimit;
 	ConnectNNode node;
 	
+	boolean goesFirst = false;
+	
 	boolean canPopOut = true;
 
 	String playerName = "This is our player name!";
@@ -36,7 +38,20 @@ public class ConnectN_player {
 		} else if (ls.size() == 5) { // ls contains game info
 			readConfig(ls);
 		} else if (ls.size() == 4) { // player1: aa player2: bb
-			// TODO read in the player names
+			String player1 = ls.get(1);
+			String player2 = ls.get(3);
+			
+			
+			if (player1.equals(this.playerName)) {
+				// I am player 1
+				this.playerNum = 1;
+			} else if (player2.equals(this.playerName)) {
+				// I am player 2
+				this.playerNum = 2;
+			} else {
+				// I am not a player in this game
+				System.out.println("Something horrid has happened");
+			}
 		} else if (ls.size() == 2) { // ls contains other player's move
 			makeMove(Integer.parseInt(ls.get(0)), Integer.parseInt(ls.get(1)), this.playerNum == 1 ? 2 : 1, gameBoard);
 		} else {
@@ -47,13 +62,6 @@ public class ConnectN_player {
 		miniMax(node, boardHeight, 0, 0);
 	}
 	
-	/**
-	 * Place a disc from the top of the column or remove from bottom (see method comment)
-	 * @param column
-	 *    		The column in which the current move is going to make. 
-	 * @param operation   
-	 * 			Indicates dropping a disc by 1, poping out a disc by 0. 
-	 */
 	private void makeMove(int column, int operation, int player, Board board){
 		if(operation==DROP)
 			board.dropADiscFromTop(column, player);
@@ -67,9 +75,15 @@ public class ConnectN_player {
 		this.boardHeight = Integer.parseInt(vals.get(0));
 		this.boardWidth = Integer.parseInt(vals.get(1));
 		this.N = Integer.parseInt(vals.get(2));
-		this.playerNum = Integer.parseInt(vals.get(3));
+		
+		int firstPlayer = Integer.parseInt(vals.get(3));
+		
 		node.setPlayer(playerNum);
 		this.timeLimit = Integer.parseInt(vals.get(4));
+		
+		if (firstPlayer == this.playerNum) {
+			this.goesFirst = true;
+		}
 	}
 
 	public void init() {
@@ -88,6 +102,22 @@ public class ConnectN_player {
 		}
 
 	}
+	
+	//	function minimax(node, depth, maximizingPlayer)
+	//    	if depth = 0 or node is a terminal node
+	//        	return the heuristic value of node
+	//		if maximizingPlayer
+	//        	bestValue := minInt
+	//        	for each child of node
+	//            	val := minimax(child, depth - 1, FALSE)
+	//            	bestValue := max(bestValue, val)
+	//            	return bestValue
+	//		else
+	//			bestValue := maxInt
+	//			for each child of node
+	//            	val := minimax(child, depth - 1, TRUE)
+	//            	bestValue := min(bestValue, val)
+	//            	return bestValue
 
 	private int miniMax(ConnectNNode currentNode, int depth, int alpha, int beta) {
 		if (depth <= 0) {
@@ -96,7 +126,7 @@ public class ConnectN_player {
 
 		
 		if (currentNode.getState().player == playerNum) {
-			int currentAlpha = -9999999;
+			int currentAlpha = Integer.MIN_VALUE;
 			for (ConnectNNode child : currentNode.getChildren()) {
 				currentAlpha = Math.max(alpha, miniMax(child, depth - 1, alpha, beta));
 				alpha = Math.max(alpha, currentAlpha);
@@ -107,7 +137,7 @@ public class ConnectN_player {
 			}
 			return currentAlpha;
 		}
-		int currentBeta = 9999999;
+		int currentBeta = Integer.MAX_VALUE;
 		for (ConnectNNode child : currentNode.getChildren()) {
 			currentBeta = Math.min(beta, miniMax(child, depth - 1, alpha, beta));
 			beta = Math.min(beta, currentBeta);
