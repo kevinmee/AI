@@ -17,6 +17,7 @@ public class ConnectN_player {
 	int N;
 	int playerNum;
 	int timeLimit;
+	ConnectNNode node;
 	
 	boolean canPopOut = true;
 
@@ -66,6 +67,7 @@ public class ConnectN_player {
 		this.boardWidth = Integer.parseInt(vals.get(1));
 		this.N = Integer.parseInt(vals.get(2));
 		this.playerNum = Integer.parseInt(vals.get(3));
+		node.setPlayer(playerNum);
 		this.timeLimit = Integer.parseInt(vals.get(4));
 	}
 
@@ -92,7 +94,7 @@ public class ConnectN_player {
 		}
 
 		// 0 is for our own player
-		if (currentNode.getState().player == 0) {
+		if (currentNode.getState().player == playerNum) {
 			int currentAlpha = -9999999;
 			for (ConnectNNode child : currentNode.getChildren()) {
 				currentAlpha = Math.max(alpha, miniMax(child, depth - 1, alpha, beta));

@@ -16,6 +16,9 @@ public class ConnectNNode {
 		return state;
 	}
 
+	public void setPlayer(int num){
+		player = num;
+	}
 	public int getPlayer() {
 		return player;
 	}
