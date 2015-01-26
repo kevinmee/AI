@@ -44,6 +44,7 @@ public class ConnectN_player {
 		}
 		
 		// Decide on a new move
+		miniMax(node,0, 0, 0);
 	}
 	
 	/**
@@ -93,7 +94,7 @@ public class ConnectN_player {
 			return getHeuristic(currentNode.getState());
 		}
 
-		// 0 is for our own player
+		
 		if (currentNode.getState().player == playerNum) {
 			int currentAlpha = -9999999;
 			for (ConnectNNode child : currentNode.getChildren()) {
