@@ -18,6 +18,8 @@ public class ConnectN_player {
 	BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 	boolean first_move = false;
 
+	TempBoard board;
+
 	public void processInput() throws IOException {
 
 		String s = input.readLine();
@@ -47,11 +49,18 @@ public class ConnectN_player {
 		this.timeLimit = Integer.parseInt(vals.get(4));
 	}
 
+	public void init() {
+		this.board = new TempBoard(this.boardHeight, this.boardWidth);
+
+	}
+
 	public static void main(String[] args) throws IOException {
 		ConnectN_player rp = new ConnectN_player();
 		System.out.println(rp.playerName);
 
 		rp.readConfig();
+
+		rp.init();
 
 		while (true) {
 			rp.processInput();
@@ -68,8 +77,7 @@ public class ConnectN_player {
 		if (currentNode.getState().player == 0) {
 			int currentAlpha = -9999999;
 			for (ConnectNNode child : currentNode.getChildren()) {
-				currentAlpha = Math.max(alpha,
-						miniMax(child, depth - 1, alpha, beta));
+				currentAlpha = Math.max(alpha, miniMax(child, depth - 1, alpha, beta));
 				alpha = Math.max(alpha, currentAlpha);
 
 				if (alpha >= beta) {
@@ -80,10 +88,9 @@ public class ConnectN_player {
 		}
 		int currentBeta = 9999999;
 		for (ConnectNNode child : currentNode.getChildren()) {
-			currentBeta = Math
-					.min(beta, miniMax(child, depth - 1, alpha, beta));
+			currentBeta = Math.min(beta, miniMax(child, depth - 1, alpha, beta));
 			beta = Math.min(beta, currentBeta);
-			
+
 			if (beta <= alpha) {
 				return beta;
 			}
