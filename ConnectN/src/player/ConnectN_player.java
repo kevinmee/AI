@@ -44,7 +44,7 @@ public class ConnectN_player {
 		}
 		
 		// Decide on a new move
-		miniMax(node,0, 0, 0);
+		miniMax(node, boardHeight, 0, 0);
 	}
 	
 	/**
