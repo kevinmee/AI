@@ -3,7 +3,7 @@
  */
 package player;
 
-public class TempBoard {
+public class Board {
 
 	int width;
 	int height;
@@ -17,7 +17,7 @@ public class TempBoard {
 	int NOCONNECTION = -1;
 	int TIE = 0;
 
-	TempBoard(int height, int width) {
+	Board(int height, int width) {
 		this.width = width;
 		this.height = height;
 		board = new int[height][width];

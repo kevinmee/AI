@@ -7,59 +7,77 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ConnectN_player {
+	
+	final int DROP=1;
+	final int POPOUT=0;
+	final int TIE=0;
 
 	int boardHeight;
 	int boardWidth;
 	int N;
-	int playerTurn;
+	int playerNum;
 	int timeLimit;
+	
+	boolean canPopOut = true;
 
 	String playerName = "This is our player name!";
 	BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-	boolean first_move = false;
 
-	TempBoard board;
+	Board gameBoard;
 
 	public void processInput() throws IOException {
-
 		String s = input.readLine();
 		List<String> ls = Arrays.asList(s.split(" "));
-		if (ls.size() == 2) {
-			System.out.println(ls.get(0) + " " + ls.get(1));
-		} else if (ls.size() == 1) {
-			System.out.println("game over!!!");
+		
+		// First digit is column number, or win/lose/tie state
+		if (ls.size() == 1) {
 			System.exit(0);
 		} else if (ls.size() == 5) { // ls contains game info
-			System.out.println("0 1"); // first move
+			readConfig(ls);
 		} else if (ls.size() == 4) { // player1: aa player2: bb
-			// TODO combine this information with game information to decide who
-			// is the first player
-		} else
+			// TODO read in the player names
+		} else if (ls.size() == 2) { // ls contains other player's move
+			makeMove(Integer.parseInt(ls.get(0)), Integer.parseInt(ls.get(1)), this.playerNum == 1 ? 2 : 1, gameBoard);
+		} else {
 			System.out.println("not what I want");
+		}
+		
+		// Decide on a new move
+	}
+	
+	/**
+	 * Place a disc from the top of the column or remove from bottom (see method comment)
+	 * @param column
+	 *    		The column in which the current move is going to make. 
+	 * @param operation   
+	 * 			Indicates dropping a disc by 1, poping out a disc by 0. 
+	 */
+	private void makeMove(int column, int operation, int player, Board board){
+		if(operation==DROP)
+			board.dropADiscFromTop(column, player);
+		else{
+			board.removeADiscFromBottom(column);
+		}
+		
 	}
 
-	public void readConfig() throws IOException {
-		String config = input.readLine();
-		List<String> vals = Arrays.asList(config.split(" "));
-
+	public void readConfig(List<String> vals) throws IOException {
 		this.boardHeight = Integer.parseInt(vals.get(0));
 		this.boardWidth = Integer.parseInt(vals.get(1));
 		this.N = Integer.parseInt(vals.get(2));
-		this.playerTurn = Integer.parseInt(vals.get(3));
+		this.playerNum = Integer.parseInt(vals.get(3));
 		this.timeLimit = Integer.parseInt(vals.get(4));
 	}
 
 	public void init() {
-		this.board = new TempBoard(this.boardHeight, this.boardWidth);
+		this.gameBoard = new Board(this.boardHeight, this.boardWidth);
 
 	}
 
 	public static void main(String[] args) throws IOException {
 		ConnectN_player rp = new ConnectN_player();
 		System.out.println(rp.playerName);
-
-		rp.readConfig();
-
+		
 		rp.init();
 
 		while (true) {
