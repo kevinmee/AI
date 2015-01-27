@@ -18,15 +18,19 @@ public class Board {
 	int TIE = 0;
 
 	Board(int height, int width) {
-		this.width = width;
-		this.height = height;
-		board = new int[height][width];
-		for (int i = 0; i < height; i++)
-			for (int j = 0; j < width; j++) {
-				board[i][j] = this.emptyCell;
-			}
-		numOfDiscsInColumn = new int[this.width];
-	}
+        this(height, width, new int[height][width]);
+    }
+
+	Board(int height, int width, int[][] boardArray) {
+            this.width = width;
+            this.height = height;
+            for (int i = 0; i < height; i++) {
+                    for (int j = 0; j < width; j++) {
+                            board[i][j] = this.emptyCell;
+                    }
+                    numOfDiscsInColumn = new int[this.width];
+            }
+    }
 
 	public boolean canRemoveADiscFromBottom(int col, int currentPlayer) {
 		if (col < 0 || col >= this.width) {
