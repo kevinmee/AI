@@ -7,19 +7,20 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ConnectN_player {
-        
-        final int DROP=1;
-        final int POPOUT=0;
-        final int TIE=0;
+
+        final int DROP = 1;
+        final int POPOUT = 0;
+        final int TIE = 0;
 
         int boardHeight;
         int boardWidth;
         int N;
         int playerNum;
         int timeLimit;
-        ConnectNNode node;
-        
-        boolean canPopOut = true;
+        ConnectNNode starterNode;
+
+        boolean canPop = true;
+        boolean otherCanPop = true;
 
         String playerName = "This is our player name!";
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
@@ -29,7 +30,7 @@ public class ConnectN_player {
         public void processInput() throws IOException {
                 String s = input.readLine();
                 List<String> ls = Arrays.asList(s.split(" "));
-                
+
                 // First digit is column number, or win/lose/tie state
                 if (ls.size() == 1) {
                         System.exit(0);
@@ -42,18 +43,20 @@ public class ConnectN_player {
                 } else {
                         System.out.println("not what I want");
                 }
-                
+
+                starterNode = new ConnectNNode(N, playerNum, canPop, otherCanPop, gameBoard);
+
                 // Decide on a new move
-                miniMax(node, boardHeight, 0, 0);
+                miniMax(starterNode, boardHeight, 0, 0);
         }
-        
-        private void makeMove(int column, int operation, int player, Board board){
-                if(operation==DROP)
+
+        private void makeMove(int column, int operation, int player, Board board) {
+                if (operation == DROP)
                         board.dropADiscFromTop(column, player);
-                else{
+                else {
                         board.removeADiscFromBottom(column);
                 }
-                
+
         }
 
         public void readConfig(List<String> vals) throws IOException {
@@ -61,19 +64,17 @@ public class ConnectN_player {
                 this.boardWidth = Integer.parseInt(vals.get(1));
                 this.N = Integer.parseInt(vals.get(2));
                 this.playerNum = Integer.parseInt(vals.get(3));
-                node.setPlayer(playerNum);
                 this.timeLimit = Integer.parseInt(vals.get(4));
         }
 
         public void init() {
                 this.gameBoard = new Board(this.boardHeight, this.boardWidth);
-                 miniMax(node, boardHeight, 0, 0);
         }
 
         public static void main(String[] args) throws IOException {
                 ConnectN_player rp = new ConnectN_player();
                 System.out.println(rp.playerName);
-                
+
                 rp.init();
 
                 while (true) {
@@ -81,30 +82,29 @@ public class ConnectN_player {
                 }
 
         }
-        
-        //        function minimax(node, depth, maximizingPlayer)
-        //            if depth = 0 or node is a terminal node
-        //                return the heuristic value of node
-        //                if maximizingPlayer
-        //                bestValue := minInt
-        //                for each child of node
-        //                    val := minimax(child, depth - 1, FALSE)
-        //                    bestValue := max(bestValue, val)
-        //                    return bestValue
-        //                else
-        //                        bestValue := maxInt
-        //                        for each child of node
-        //                    val := minimax(child, depth - 1, TRUE)
-        //                    bestValue := min(bestValue, val)
-        //                    return bestValue
+
+        // function minimax(node, depth, maximizingPlayer)
+        // if depth = 0 or node is a terminal node
+        // return the heuristic value of node
+        // if maximizingPlayer
+        // bestValue := minInt
+        // for each child of node
+        // val := minimax(child, depth - 1, FALSE)
+        // bestValue := max(bestValue, val)
+        // return bestValue
+        // else
+        // bestValue := maxInt
+        // for each child of node
+        // val := minimax(child, depth - 1, TRUE)
+        // bestValue := min(bestValue, val)
+        // return bestValue
 
         private int miniMax(ConnectNNode currentNode, int depth, int alpha, int beta) {
-                if (depth <= 0) {
-                        return getHeuristic(currentNode.getState());
+                if (depth <= 0 || currentNode.isTerminal()) {
+                        return getHeuristic(currentNode);
                 }
 
-                
-                if (currentNode.getState().player == playerNum) {
+                if (currentNode.getPlayer() == playerNum) {
                         int currentAlpha = Integer.MIN_VALUE;
                         for (ConnectNNode child : currentNode.getChildren()) {
                                 currentAlpha = Math.max(alpha, miniMax(child, depth - 1, alpha, beta));
@@ -115,23 +115,23 @@ public class ConnectN_player {
                                 }
                         }
                         return currentAlpha;
-                }
-                int currentBeta = Integer.MAX_VALUE;
-                for (ConnectNNode child : currentNode.getChildren()) {
-                        currentBeta = Math.min(beta, miniMax(child, depth - 1, alpha, beta));
-                        beta = Math.min(beta, currentBeta);
+                } else {
+                        int currentBeta = Integer.MAX_VALUE;
+                        for (ConnectNNode child : currentNode.getChildren()) {
+                                currentBeta = Math.min(beta, miniMax(child, depth - 1, alpha, beta));
+                                beta = Math.min(beta, currentBeta);
 
-                        if (beta <= alpha) {
-                                return beta;
+                                if (beta <= alpha) {
+                                        return beta;
+                                }
                         }
+                        return currentBeta;
                 }
-                return currentBeta;
 
         }
-                                    
-        private int getHeuristic(ConnectNNode state) {
-                // TODO Auto-generated method stub
-                return 0;
+
+        private int getHeuristic(ConnectNNode node) {
+                return node.getValue();
         }
-                                    
+
 }

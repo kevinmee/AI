@@ -12,6 +12,7 @@ public class ConnectNNode {
 	ArrayList<ConnectNNode> children = new ArrayList<ConnectNNode>();
 	boolean weCanPop;
 	boolean theyCanPop;
+	int state = -1;
 
 	/**
 	 * N - the N value of connect N player - the player number associated with
@@ -24,10 +25,16 @@ public class ConnectNNode {
 		this.theyCanPop = otherCanPop;
 		this.N = N;
 		this.player = player;
+
+		this.state = gameBoard.isConnectN(this.N);
 	}
 
 	public int getPlayer() {
 		return player;
+	}
+
+	public boolean isTerminal() {
+		return (this.state != -1);
 	}
 
 	/*
@@ -37,6 +44,8 @@ public class ConnectNNode {
 		if (children.isEmpty()) {
 			return children;
 		} else {
+			// Populate all the children
+
 			// Populate normal move children
 			for (int i = 0; i < gameBoard.width; i++) {
 				Board childBoard = new Board(gameBoard.height, gameBoard.width, gameBoard.board);
@@ -55,6 +64,10 @@ public class ConnectNNode {
 
 			return children;
 		}
+	}
+
+	public int getValue() {
+		return 0;
 	}
 
 }
