@@ -55,7 +55,7 @@ public class ConnectNNode {
 			// Populate normal move children
 			for (int i = 0; i < gameBoard.width; i++) {
 				Board childBoard = new Board(gameBoard.height, gameBoard.width, N, gameBoard.board);
-
+				childBoard.dropADiscFromTop(i, player);
 				children.add(new ConnectNNode(N, (player % 2) + 1, this.theyCanPop, this.weCanPop, childBoard, i + " 1"));
 			}
 
@@ -63,7 +63,7 @@ public class ConnectNNode {
 				// Populate the pop move children
 				for (int i = 0; i < gameBoard.width; i++) {
 					Board childBoard = new Board(gameBoard.height, gameBoard.width, N, gameBoard.board);
-
+					childBoard.dropADiscFromTop(i, player);
 					children.add(new ConnectNNode(N, (player % 2) + 1, this.theyCanPop, false, childBoard, i + " 0"));
 				}
 			}
