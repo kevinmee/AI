@@ -139,6 +139,11 @@ public class ConnectN_player {
 //			rp.processInput();
 //		}
 		
+		
+		// so bestChild is getting passed as a long chain of best children... i dont think thats right
+		// also, are we setting the alpha/beta values correctly? they always seem to be max.value / min.value
+		//
+		
 		Board board = new Board(10, 10, 4);
 		ConnectNNode starterNode = new ConnectNNode(4, 2, true, true, board, "");
 		
