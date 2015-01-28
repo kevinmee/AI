@@ -47,6 +47,16 @@ public class Board {
 			numOfDiscsInColumn = new int[this.width];
 		}
 	}
+	
+	 public void printBoard(){
+		 System.out.println("Board: ");
+		 for(int i=0;i<height;i++){
+				for(int j=0;j<width;j++){
+					System.out.print(board[i][j]+" ");
+				}
+				System.out.println();
+		 }
+	 }
 
 	public boolean canRemoveADiscFromBottom(int col, int currentPlayer) {
 		if (col < 0 || col >= this.width) {
