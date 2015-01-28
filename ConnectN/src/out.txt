@@ -2,12 +2,14 @@ Initialized
 Player name is player
 Incoming Message: player1: aa player2: player
 Finished with the input: player1: aa player2: player
-Incoming Message: 6 7 3 1 10
+Incoming Message: 6 7 3 2 10
 Config Recieved - length: 5
 Config Processed
 Init Started
 Init Ended
-init workedFinished with the input: 6 7 3 1 10
+Starting Minimax Code
+best move is |0 1|
+init workedFinished with the input: 6 7 3 2 10
 Incoming Message: 0 1
 Starting Minimax Code
 best move is |0 1|
@@ -19,5 +21,3 @@ Finished with the input: 0 1
 Incoming Message: 0 1
 Starting Minimax Code
 best move is |0 1|
-Finished with the input: 0 1
-Incoming Message: win

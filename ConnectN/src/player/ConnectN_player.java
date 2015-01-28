@@ -17,6 +17,7 @@ public class ConnectN_player {
 	int boardWidth;
 	int N;
 	int playerNum;
+	int firstPlayer;
 	int timeLimit;
 	ConnectNNode starterNode;
 
@@ -44,24 +45,28 @@ public class ConnectN_player {
 
 			this.init();
 			
+			if (playerNum == firstPlayer) {
+				takeTurn();
+			}
+			
 			logger.write("init worked");
 			logger.flush();
 		} else if (ls.size() == 4) { // player1: aa player2: bb
-			// TODO read in the player names
+			if (playerName.equals(ls.get(1))) {
+				// I am player 1
+				playerNum = 1;
+			} else if (playerName.equals(ls.get(3))) {
+				// I am player 2
+				playerNum = 2;
+			} else {
+				// Something is wrong
+				System.out.println("I am inturupting this game");
+			}
+			
 		} else if (ls.size() == 2) { // ls contains other player's move
 			makeMove(Integer.parseInt(ls.get(0)), Integer.parseInt(ls.get(1)), this.playerNum == 1 ? 2 : 1, gameBoard);
 
-			starterNode = new ConnectNNode(N, playerNum, canPop, otherCanPop, gameBoard, "");
-			// Decide on a new move
-			
-			logger.write("Starting Minimax Code" + "\n");
-			logger.flush();
-			miniMax(starterNode, boardHeight, Integer.MIN_VALUE, Integer.MAX_VALUE);
-
-			logger.write("best move is |" + starterNode.bestChild.move + "|" + "\n");
-			logger.flush();
-			
-			System.out.println(starterNode.bestChild.move);
+			takeTurn();
 		} else {
 			logger.write("not what I want: " + s + "\n");
 			logger.flush();
@@ -70,6 +75,24 @@ public class ConnectN_player {
 		
 		logger.write("Finished with the input: " + s + "\n");
 		logger.flush();
+	}
+	
+	private void takeTurn() throws IOException {
+		starterNode = new ConnectNNode(N, playerNum, canPop, otherCanPop, gameBoard, "");
+		// Decide on a new move
+		
+		logger.write("Starting Minimax Code" + "\n");
+		logger.flush();
+		miniMax(starterNode, boardHeight, Integer.MIN_VALUE, Integer.MAX_VALUE);
+
+		logger.write("best move is |" + starterNode.bestChild.move + "|" + "\n");
+		logger.flush();
+		
+
+		List<String> moveList = Arrays.asList(starterNode.bestChild.move.split(" "));
+		
+		makeMove(Integer.parseInt(moveList.get(0)), Integer.parseInt(moveList.get(1)), this.playerNum == 1 ? 1 : 2, gameBoard);
+		System.out.println(starterNode.bestChild.move);
 	}
 
 	private void makeMove(int column, int operation, int player, Board board) {
@@ -87,7 +110,7 @@ public class ConnectN_player {
 		this.boardHeight = Integer.parseInt(vals.get(0));
 		this.boardWidth = Integer.parseInt(vals.get(1));
 		this.N = Integer.parseInt(vals.get(2));
-		this.playerNum = Integer.parseInt(vals.get(3));
+		this.firstPlayer = Integer.parseInt(vals.get(3));
 		this.timeLimit = Integer.parseInt(vals.get(4));
 
 		logger.write("Config Processed\n");
