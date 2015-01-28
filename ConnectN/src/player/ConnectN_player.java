@@ -1,3 +1,6 @@
+/**
+ * Christopher Tibbetts & Kevin Mee
+ */
 package player;
 
 import java.io.BufferedReader;
