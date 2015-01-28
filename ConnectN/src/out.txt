@@ -10,3 +10,14 @@ Init Ended
 init workedFinished with the input: 6 7 3 1 10
 Incoming Message: 0 1
 Starting Minimax Code
+best move is |0 1|
+Finished with the input: 0 1
+Incoming Message: 0 1
+Starting Minimax Code
+best move is |0 1|
+Finished with the input: 0 1
+Incoming Message: 0 1
+Starting Minimax Code
+best move is |0 1|
+Finished with the input: 0 1
+Incoming Message: win

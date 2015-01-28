@@ -103,27 +103,27 @@ public class ConnectN_player {
 	}
 
 	public static void main(String[] args) throws IOException {
-//		logger = new FileWriter("out.txt");
-//		logger.write("Initialized" + "\n");
-//		logger.flush();
-//		
-//		ConnectN_player rp = new ConnectN_player();
-//		System.out.println(rp.playerName);
-//		logger.write("Player name is " + rp.playerName + "\n");
-//		logger.flush();
-//
-//		while (true) {
-//			rp.processInput();
-//		}
-		
-		ConnectNNode starterNode = new ConnectNNode(4, 2, true, true, new Board(10, 10, 4), "");
+		logger = new FileWriter("out.txt");
+		logger.write("Initialized" + "\n");
+		logger.flush();
 		
 		ConnectN_player rp = new ConnectN_player();
-		rp.playerNum = 1;
-		
-		rp.miniMax(starterNode, 4, Integer.MIN_VALUE, Integer.MAX_VALUE);
+		System.out.println(rp.playerName);
+		logger.write("Player name is " + rp.playerName + "\n");
+		logger.flush();
 
-		System.out.println(starterNode.bestChild.move);
+		while (true) {
+			rp.processInput();
+		}
+		
+//		ConnectNNode starterNode = new ConnectNNode(4, 2, true, true, new Board(10, 10, 4), "");
+//		
+//		ConnectN_player rp = new ConnectN_player();
+//		rp.playerNum = 1;
+//		
+//		rp.miniMax(starterNode, 4, Integer.MIN_VALUE, Integer.MAX_VALUE);
+//
+//		System.out.println(starterNode.bestChild.move);
 	}
 
 	// function minimax(node, depth, maximizingPlayer)
@@ -153,7 +153,7 @@ public class ConnectN_player {
 				currentAlpha = Math.max(alpha, miniMax(child, depth - 1, alpha, beta));
 				alpha = Math.max(alpha, currentAlpha);
 
-				if (alpha >= beta) {
+				if (alpha <= beta) {
 					currentNode.setBestChild(child);
 					return beta;
 				}
@@ -165,7 +165,7 @@ public class ConnectN_player {
 				currentBeta = Math.min(beta, miniMax(child, depth - 1, alpha, beta));
 				beta = Math.min(beta, currentBeta);
 
-				if (beta <= alpha) {
+				if (beta >= alpha) {
 					currentNode.setBestChild(child);
 					return beta;
 				}
