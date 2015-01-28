@@ -54,18 +54,22 @@ public class ConnectNNode {
 
 			// Populate normal move children
 			for (int i = 0; i < gameBoard.width; i++) {				
-				Board childBoard = new Board(gameBoard.height, gameBoard.width, N, gameBoard.board);
+				Board childBoard = gameBoard.clone();
 				childBoard.dropADiscFromTop(i, player);
+				childBoard.printBoard();
 				
 				children.add(new ConnectNNode(N, (player % 2) + 1, this.theyCanPop, this.weCanPop, childBoard, i + " 1"));
+				
+				childBoard = null;
 			}
 
 			if (this.weCanPop) {
 				// Populate the pop move children
 				for (int i = 0; i < gameBoard.width; i++) {
-					Board childBoard = new Board(gameBoard.height, gameBoard.width, N, gameBoard.board);
+					Board childBoard = gameBoard.clone();
 					childBoard.removeADiscFromBottom(i);
 					children.add(new ConnectNNode(N, (player % 2) + 1, this.theyCanPop, false, childBoard, i + " 0"));
+					childBoard = null;
 				}
 			}
 

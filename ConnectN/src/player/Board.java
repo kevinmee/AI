@@ -10,6 +10,8 @@ public class Board {
 	int board[][];
 	int numOfDiscsInColumn[];
 	int emptyCell = 9;
+	
+	int theN;
 
 	int PLAYER1 = 1;
 	int PLAYER2 = 2;
@@ -21,45 +23,43 @@ public class Board {
 	int TIE = 0;
 
 	Board(int height, int width, int N) {
-		int[][] boardArray = new int[height][width];
-		
-		for (int i = 0; i < height; i++) {
+		this.width = width;
+		this.height = height;
+		board = new int[height][width];
+		for (int i = 0; i < height; i++)
 			for (int j = 0; j < width; j++) {
-				boardArray[i][j] = this.emptyCell;
+				board[i][j] = this.emptyCell;
 			}
-		}
-		
-		makeBoard(height, width, N, boardArray);
-	}
+		numOfDiscsInColumn = new int[this.width];
 
-	Board(int height, int width, int N, int[][] boardArray) {
-		makeBoard(height, width, N, boardArray);
-	}
-	
-	public void makeBoard(int height, int width, int N, int[][] boardArray) {
-		numOfDiscsInColumn = new int[width];
-		
-		this.board = boardArray;
 		player1Connections = new int[N];
 		for (int i = 0; i < player1Connections.length; i++)
 			player1Connections[i] = 0;
 		player2Connections = new int[N];
 		for (int i = 0; i < player2Connections.length; i++)
 			player2Connections[i] = 0;
-
-		this.width = width;
-		this.height = height;
+		
+		this.theN = N;
 	}
 	
-	 public void printBoard(){
-		 System.out.println("Board: ");
-		 for(int i=0;i<height;i++){
-				for(int j=0;j<width;j++){
-					System.out.print(board[i][j]+" ");
-				}
-				System.out.println();
-		 }
-	 }
+	public Board clone() {
+		Board newBoard = new Board(this.height, this.width, this.theN);
+		
+		newBoard.board = this.board;
+		newBoard.numOfDiscsInColumn = this.numOfDiscsInColumn;
+		
+		return newBoard;
+	}
+
+	public void printBoard() {
+		System.out.println("Board: ");
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				System.out.print(board[i][j] + " ");
+			}
+			System.out.println();
+		}
+	}
 
 	public boolean canRemoveADiscFromBottom(int col, int currentPlayer) {
 		if (col < 0 || col >= this.width) {

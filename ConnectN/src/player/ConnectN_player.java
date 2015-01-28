@@ -179,8 +179,8 @@ public class ConnectN_player {
 	// return bestValue
 
 	private int miniMax(ConnectNNode currentNode, int depth, int alpha, int beta) {
+		currentNode.gameBoard.printBoard();
 		if (depth <= 0 || currentNode.terminal) {
-			currentNode.gameBoard.printBoard();
 			return getHeuristic(currentNode);
 		}
 
