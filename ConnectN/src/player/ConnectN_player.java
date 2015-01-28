@@ -126,40 +126,18 @@ public class ConnectN_player {
 	}
 
 	public static void main(String[] args) throws IOException {
-//		logger = new FileWriter("out.txt");
-//		logger.write("Initialized" + "\n");
-//		logger.flush();
-//		
-//		ConnectN_player rp = new ConnectN_player();
-//		System.out.println(rp.playerName);
-//		logger.write("Player name is " + rp.playerName + "\n");
-//		logger.flush();
-//
-//		while (true) {
-//			rp.processInput();
-//		}
-		
-		
-		// so bestChild is getting passed as a long chain of best children... i dont think thats right
-		// also, are we setting the alpha/beta values correctly? they always seem to be max.value / min.value
-		//
-		
-		Board board = new Board(10, 10, 4);
-		ConnectNNode starterNode = new ConnectNNode(4, 2, true, true, board, "");
+		logger = new FileWriter("out.txt");
+		logger.write("Initialized" + "\n");
+		logger.flush();
 		
 		ConnectN_player rp = new ConnectN_player();
-		rp.makeMove(1, 1, 2, board);
-		rp.makeMove(2, 1, 1, board);
-		rp.makeMove(1, 1, 2, board);
-		rp.makeMove(2, 1, 1, board);
-		
-		board.printBoard();
-		
-		rp.playerNum = 1;
-		
-		rp.miniMax(starterNode, 4, Integer.MIN_VALUE, Integer.MAX_VALUE);
+		System.out.println(rp.playerName);
+		logger.write("Player name is " + rp.playerName + "\n");
+		logger.flush();
 
-		System.out.println(starterNode.bestChild.move);
+		while (true) {
+			rp.processInput();
+		}
 	}
 
 	// function minimax(node, depth, maximizingPlayer)
