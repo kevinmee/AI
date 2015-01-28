@@ -5,282 +5,261 @@ package player;
 
 public class Board {
 
-	int width;
-	int height;
-	int board[][];
-	int numOfDiscsInColumn[];
-	int emptyCell = 9;
+        int width;
+        int height;
+        int board[][];
+        int numOfDiscsInColumn[];
+        int emptyCell = 9;
 
-	int PLAYER1 = 1;
-	int PLAYER2 = 2;
+        int PLAYER1 = 1;
+        int PLAYER2 = 2;
 
-	int NOCONNECTION = -1;
-	int TIE = 0;
+        int player1Connections[];
+        int player2Connections[];
 
-	Board(int height, int width) {
-		this(height, width, new int[height][width]);
-	}
+        int NOCONNECTION = -1;
+        int TIE = 0;
 
-	Board(int height, int width, int[][] boardArray) {
-		this.width = width;
-		this.height = height;
-		for (int i = 0; i < height; i++) {
-			for (int j = 0; j < width; j++) {
-				board[i][j] = this.emptyCell;
-			}
-			numOfDiscsInColumn = new int[this.width];
-		}
-	}
+        Board(int height, int width, int N) {
+                this(height, width, N, new int[height][width]);
+        }
 
-	public boolean canRemoveADiscFromBottom(int col, int currentPlayer) {
-		if (col < 0 || col >= this.width) {
-			return false;
-		} else if (board[height - 1][col] != currentPlayer) {
-			return false;
-		} else
-			return true;
-	}
+        Board(int height, int width, int N, int[][] boardArray) {
+                player1Connections = new int[N];
+                for (int i = 0; i < player1Connections.length; i++)
+                        player1Connections[i] = 0;
+                player2Connections = new int[N];
+                for (int i = 0; i < player2Connections.length; i++)
+                        player2Connections[i] = 0;
 
-	public void removeADiscFromBottom(int col) {
-		int i;
-		for (i = height - 1; i > height - this.numOfDiscsInColumn[col]; i--) {
-			board[i][col] = board[i - 1][col];
-		}
-		board[i][col] = this.emptyCell;
-		this.numOfDiscsInColumn[col]--;
-	}
+                this.width = width;
+                this.height = height;
+                for (int i = 0; i < height; i++) {
+                        for (int j = 0; j < width; j++) {
+                                board[i][j] = this.emptyCell;
+                        }
+                        numOfDiscsInColumn = new int[this.width];
+                }
+        }
 
-	public boolean canDropADiscFromTop(int col, int currentPlayer) {
-		if (col < 0 || col >= this.width) {
-			return false;
-		} else if (this.numOfDiscsInColumn[col] == this.height) {
-			return false;
-		} else
-			return true;
-	}
+        public boolean canRemoveADiscFromBottom(int col, int currentPlayer) {
+                if (col < 0 || col >= this.width) {
+                        return false;
+                } else if (board[height - 1][col] != currentPlayer) {
+                        return false;
+                } else
+                        return true;
+        }
 
-	public void dropADiscFromTop(int col, int currentplayer) {
-		int firstEmptyCellRow = height - this.numOfDiscsInColumn[col] - 1;
-		board[firstEmptyCellRow][col] = currentplayer;
-		this.numOfDiscsInColumn[col]++;
-	}
+        public void removeADiscFromBottom(int col) {
+                int i;
+                for (i = height - 1; i > height - this.numOfDiscsInColumn[col]; i--) {
+                        board[i][col] = board[i - 1][col];
+                }
+                board[i][col] = this.emptyCell;
+                this.numOfDiscsInColumn[col]--;
+        }
 
-	/**
-	 * Check if one of the players gets N checkers in a row (horizontally,
-	 * vertically or diagonally)
-	 * 
-	 * @return the value of winner. If winner=-1, nobody win and game continues;
-	 *         If winner=0/TIE, it's a tie; If winner=1, player1 wins; If
-	 *         winner=2, player2 wins.
-	 */
+        public boolean canDropADiscFromTop(int col, int currentPlayer) {
+                if (col < 0 || col >= this.width) {
+                        return false;
+                } else if (this.numOfDiscsInColumn[col] == this.height) {
+                        return false;
+                } else
+                        return true;
+        }
 
-	public int isConnectN(int N) {
-		int tmp_winner = checkHorizontally(N);
+        public void dropADiscFromTop(int col, int currentplayer) {
+                int firstEmptyCellRow = height - this.numOfDiscsInColumn[col] - 1;
+                board[firstEmptyCellRow][col] = currentplayer;
+                this.numOfDiscsInColumn[col]++;
+        }
 
-		if (tmp_winner != this.NOCONNECTION)
-			return tmp_winner;
+        public boolean isConnectN(int N) {
+                checkHorizontally(N);
+                if (player1Connections[N - 1] > 0 || player2Connections[N - 1] > 0)
+                        return true;
 
-		tmp_winner = checkVertically(N);
-		if (tmp_winner != this.NOCONNECTION)
-			return tmp_winner;
+                checkVertically(N);
+                if (player1Connections[N - 1] > 0 || player2Connections[N - 1] > 0)
+                        return true;
 
-		tmp_winner = checkDiagonally1(N);
-		if (tmp_winner != this.NOCONNECTION)
-			return tmp_winner;
-		tmp_winner = checkDiagonally2(N);
-		if (tmp_winner != this.NOCONNECTION)
-			return tmp_winner;
+                checkDiagonally1(N);
+                if (player1Connections[N - 1] > 0 || player2Connections[N - 1] > 0)
+                        return true;
 
-		return this.NOCONNECTION;
+                checkDiagonally2(N);
+                if (player1Connections[N - 1] > 0 || player2Connections[N - 1] > 0)
+                        return true;
 
-	}
+                return false;
 
-	public int checkHorizontally(int N) {
-		int max1 = 0;
-		int max2 = 0;
-		boolean player1_win = false;
-		boolean player2_win = false;
-		// check each row, horizontally
-		for (int i = 0; i < this.height; i++) {
-			max1 = 0;
-			max2 = 0;
-			for (int j = 0; j < this.width; j++) {
-				if (board[i][j] == PLAYER1) {
-					max1++;
-					max2 = 0;
-					if (max1 == N)
-						player1_win = true;
-				} else if (board[i][j] == PLAYER2) {
-					max1 = 0;
-					max2++;
-					if (max2 == N)
-						player2_win = true;
-				} else {
-					max1 = 0;
-					max2 = 0;
-				}
-			}
-		}
-		if (player1_win && player2_win)
-			return this.TIE;
-		if (player1_win)
-			return this.PLAYER1;
-		if (player2_win)
-			return this.PLAYER2;
+        }
 
-		return this.NOCONNECTION;
-	}
+        public void checkHorizontally(int N) {
+                int max1 = 0;
+                int max2 = 0;
+                int player1_win = 0;
+                int player2_win = 0;
+                // check each row, horizontally
+                for (int i = 0; i < this.height; i++) {
+                        max1 = 0;
+                        max2 = 0;
+                        for (int j = 0; j < this.width; j++) {
+                                if (board[i][j] == PLAYER1) {
+                                        max1++;
+                                        max2 = 0;
+                                        if (max1 == N)
+                                                player1_win++;
+                                } else if (board[i][j] == PLAYER2) {
+                                        max1 = 0;
+                                        max2++;
+                                        if (max2 == N)
+                                                player2_win++;
+                                } else {
+                                        max1 = 0;
+                                        max2 = 0;
+                                }
+                        }
+                }
 
-	public int checkVertically(int N) {
-		// check each column, vertically
-		int max1 = 0;
-		int max2 = 0;
-		boolean player1_win = false;
-		boolean player2_win = false;
+                player1Connections[N - 1] += player1_win;
+                player2Connections[N - 1] += player2_win;
+        }
 
-		for (int j = 0; j < this.width; j++) {
-			max1 = 0;
-			max2 = 0;
-			for (int i = 0; i < this.height; i++) {
-				if (board[i][j] == PLAYER1) {
-					max1++;
-					max2 = 0;
-					if (max1 == N)
-						player1_win = true;
-				} else if (board[i][j] == PLAYER2) {
-					max1 = 0;
-					max2++;
-					if (max2 == N)
-						player2_win = true;
-				} else {
-					max1 = 0;
-					max2 = 0;
-				}
-			}
-		}
-		if (player1_win && player2_win)
-			return this.TIE;
-		if (player1_win)
-			return this.PLAYER1;
-		if (player2_win)
-			return this.PLAYER2;
+        public void checkVertically(int N) {
+                // check each column, vertically
+                int max1 = 0;
+                int max2 = 0;
+                int player1_win = 0;
+                int player2_win = 0;
 
-		return this.NOCONNECTION;
-	}
+                for (int j = 0; j < this.width; j++) {
+                        max1 = 0;
+                        max2 = 0;
+                        for (int i = 0; i < this.height; i++) {
+                                if (board[i][j] == PLAYER1) {
+                                        max1++;
+                                        max2 = 0;
+                                        if (max1 == N)
+                                                player1_win++;
+                                } else if (board[i][j] == PLAYER2) {
+                                        max1 = 0;
+                                        max2++;
+                                        if (max2 == N)
+                                                player2_win++;
+                                } else {
+                                        max1 = 0;
+                                        max2 = 0;
+                                }
+                        }
+                }
 
-	public int checkDiagonally1(int N) {
-		// check diagonally y=-x+k
-		int max1 = 0;
-		int max2 = 0;
-		boolean player1_win = false;
-		boolean player2_win = false;
-		int upper_bound = height - 1 + width - 1 - (N - 1);
+                player1Connections[N - 1] += player1_win;
+                player2Connections[N - 1] += player2_win;
+        }
 
-		for (int k = N - 1; k <= upper_bound; k++) {
-			max1 = 0;
-			max2 = 0;
-			int x, y;
-			if (k < width)
-				x = k;
-			else
-				x = width - 1;
-			y = -x + k;
+        public void checkDiagonally1(int N) {
+                // check diagonally y=-x+k
+                int max1 = 0;
+                int max2 = 0;
+                int player1_win = 0;
+                int player2_win = 0;
+                int upper_bound = height - 1 + width - 1 - (N - 1);
 
-			while (x >= 0 && y < height) {
-				// System.out.println("k: "+k+", x: "+x+", y: "+y);
-				if (board[height - 1 - y][x] == PLAYER1) {
-					max1++;
-					max2 = 0;
-					if (max1 == N)
-						player1_win = true;
-				} else if (board[height - 1 - y][x] == PLAYER2) {
-					max1 = 0;
-					max2++;
-					if (max2 == N)
-						player2_win = true;
-				} else {
-					max1 = 0;
-					max2 = 0;
-				}
-				x--;
-				y++;
-			}
+                for (int k = N - 1; k <= upper_bound; k++) {
+                        max1 = 0;
+                        max2 = 0;
+                        int x, y;
+                        if (k < width)
+                                x = k;
+                        else
+                                x = width - 1;
+                        y = -x + k;
 
-		}
-		if (player1_win && player2_win)
-			return this.TIE;
-		if (player1_win)
-			return this.PLAYER1;
-		if (player2_win)
-			return this.PLAYER2;
+                        while (x >= 0 && y < height) {
+                                // System.out.println("k: "+k+", x: "+x+", y: "+y);
+                                if (board[height - 1 - y][x] == PLAYER1) {
+                                        max1++;
+                                        max2 = 0;
+                                        if (max1 == N)
+                                                player1_win++;
+                                } else if (board[height - 1 - y][x] == PLAYER2) {
+                                        max1 = 0;
+                                        max2++;
+                                        if (max2 == N)
+                                                player2_win++;
+                                } else {
+                                        max1 = 0;
+                                        max2 = 0;
+                                }
+                                x--;
+                                y++;
+                        }
 
-		return this.NOCONNECTION;
-	}
+                }
+                player1Connections[N - 1] += player1_win;
+                player2Connections[N - 1] += player2_win;
+        }
 
-	public int checkDiagonally2(int N) {
-		// check diagonally y=x-k
-		int max1 = 0;
-		int max2 = 0;
-		boolean player1_win = false;
-		boolean player2_win = false;
-		int upper_bound = width - 1 - (N - 1);
-		int lower_bound = -(height - 1 - (N - 1));
-		// System.out.println("lower: "+lower_bound+", upper_bound: "+upper_bound);
-		for (int k = lower_bound; k <= upper_bound; k++) {
-			max1 = 0;
-			max2 = 0;
-			int x, y;
-			if (k >= 0)
-				x = k;
-			else
-				x = 0;
-			y = x - k;
-			while (x >= 0 && x < width && y < height) {
-				// System.out.println("k: "+k+", x: "+x+", y: "+y);
-				if (board[height - 1 - y][x] == PLAYER1) {
-					max1++;
-					max2 = 0;
-					if (max1 == N)
-						player1_win = true;
-				} else if (board[height - 1 - y][x] == PLAYER2) {
-					max1 = 0;
-					max2++;
-					if (max2 == N)
-						player2_win = true;
-				} else {
-					max1 = 0;
-					max2 = 0;
-				}
-				x++;
-				y++;
-			}
+        public void checkDiagonally2(int N) {
+                // check diagonally y=x-k
+                int max1 = 0;
+                int max2 = 0;
+                int player1_win = 0;
+                int player2_win = 0;
+                int upper_bound = width - 1 - (N - 1);
+                int lower_bound = -(height - 1 - (N - 1));
+                // System.out.println("lower: "+lower_bound+", upper_bound: "+upper_bound);
+                for (int k = lower_bound; k <= upper_bound; k++) {
+                        max1 = 0;
+                        max2 = 0;
+                        int x, y;
+                        if (k >= 0)
+                                x = k;
+                        else
+                                x = 0;
+                        y = x - k;
+                        while (x >= 0 && x < width && y < height) {
+                                // System.out.println("k: "+k+", x: "+x+", y: "+y);
+                                if (board[height - 1 - y][x] == PLAYER1) {
+                                        max1++;
+                                        max2 = 0;
+                                        if (max1 == N)
+                                                player1_win++;
+                                } else if (board[height - 1 - y][x] == PLAYER2) {
+                                        max1 = 0;
+                                        max2++;
+                                        if (max2 == N)
+                                                player2_win++;
+                                } else {
+                                        max1 = 0;
+                                        max2 = 0;
+                                }
+                                x++;
+                                y++;
+                        }
 
-		} // end for y=x-k
+                } // end for y=x-k
 
-		if (player1_win && player2_win)
-			return this.TIE;
-		if (player1_win)
-			return this.PLAYER1;
-		if (player2_win)
-			return this.PLAYER2;
+                player1Connections[N - 1] += player1_win;
+                player2Connections[N - 1] += player2_win;
+        }
 
-		return this.NOCONNECTION;
-	}
+        public boolean isFull() {
+                for (int i = 0; i < height; i++)
+                        for (int j = 0; j < width; j++) {
+                                if (board[i][j] == this.emptyCell)
+                                        return false;
+                        }
+                return true;
+        }
 
-	public boolean isFull() {
-		for (int i = 0; i < height; i++)
-			for (int j = 0; j < width; j++) {
-				if (board[i][j] == this.emptyCell)
-					return false;
-			}
-		return true;
-	}
-
-	public void setBoard(int row, int col, int player) {
-		if (row >= height || col >= width)
-			throw new IllegalArgumentException("The row or column number is out of bound!");
-		if (player != this.PLAYER1 && player != this.PLAYER2)
-			throw new IllegalArgumentException("Wrong player!");
-		this.board[row][col] = player;
-	}
+        public void setBoard(int row, int col, int player) {
+                if (row >= height || col >= width)
+                        throw new IllegalArgumentException("The row or column number is out of bound!");
+                if (player != this.PLAYER1 && player != this.PLAYER2)
+                        throw new IllegalArgumentException("Wrong player!");
+                this.board[row][col] = player;
+        }
 }
