@@ -103,19 +103,27 @@ public class ConnectN_player {
 	}
 
 	public static void main(String[] args) throws IOException {
-		logger = new FileWriter("out.txt");
-		logger.write("Initialized" + "\n");
-		logger.flush();
+//		logger = new FileWriter("out.txt");
+//		logger.write("Initialized" + "\n");
+//		logger.flush();
+//		
+//		ConnectN_player rp = new ConnectN_player();
+//		System.out.println(rp.playerName);
+//		logger.write("Player name is " + rp.playerName + "\n");
+//		logger.flush();
+//
+//		while (true) {
+//			rp.processInput();
+//		}
+		
+		ConnectNNode starterNode = new ConnectNNode(4, 2, true, true, new Board(10, 10, 4), "");
 		
 		ConnectN_player rp = new ConnectN_player();
-		System.out.println(rp.playerName);
-		logger.write("Player name is " + rp.playerName + "\n");
-		logger.flush();
+		rp.playerNum = 1;
+		
+		rp.miniMax(starterNode, 4, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
-		while (true) {
-			rp.processInput();
-		}
-
+		System.out.println(starterNode.bestChild.move);
 	}
 
 	// function minimax(node, depth, maximizingPlayer)

@@ -47,7 +47,7 @@ public class ConnectNNode {
 	 * returns the list of children from the current node
 	 */
 	public List<ConnectNNode> getChildren() {
-		if (children.isEmpty()) {
+		if (!children.isEmpty()) {
 			return children;
 		} else {
 			// Populate all the children
