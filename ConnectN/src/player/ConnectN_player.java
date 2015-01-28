@@ -33,6 +33,8 @@ public class ConnectN_player {
 	public void processInput() throws IOException {
 		String s = input.readLine();
 		List<String> ls = Arrays.asList(s.split(" "));
+		logger.write("Incoming Message: " + s + "\n");
+		logger.flush();
 
 		// First digit is column number, or win/lose/tie state
 		if (ls.size() == 1) {
@@ -41,6 +43,9 @@ public class ConnectN_player {
 			readConfig(ls);
 
 			this.init();
+			
+			logger.write("init worked");
+			logger.flush();
 		} else if (ls.size() == 4) { // player1: aa player2: bb
 			// TODO read in the player names
 		} else if (ls.size() == 2) { // ls contains other player's move
@@ -48,6 +53,9 @@ public class ConnectN_player {
 
 			starterNode = new ConnectNNode(N, playerNum, canPop, otherCanPop, gameBoard, "");
 			// Decide on a new move
+			
+			logger.write("Starting Minimax Code" + "\n");
+			logger.flush();
 			miniMax(starterNode, boardHeight, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
 			logger.write("best move is |" + starterNode.bestChild.move + "|" + "\n");
@@ -59,7 +67,9 @@ public class ConnectN_player {
 			logger.flush();
 			System.out.println("not what I want");
 		}
-
+		
+		logger.write("Finished with the input: " + s + "\n");
+		logger.flush();
 	}
 
 	private void makeMove(int column, int operation, int player, Board board) {
@@ -72,15 +82,24 @@ public class ConnectN_player {
 	}
 
 	public void readConfig(List<String> vals) throws IOException {
+		logger.write("Config Recieved - length: " + vals.size() + "\n");
+		logger.flush();
 		this.boardHeight = Integer.parseInt(vals.get(0));
 		this.boardWidth = Integer.parseInt(vals.get(1));
 		this.N = Integer.parseInt(vals.get(2));
 		this.playerNum = Integer.parseInt(vals.get(3));
 		this.timeLimit = Integer.parseInt(vals.get(4));
+
+		logger.write("Config Processed\n");
+		logger.flush();
 	}
 
-	public void init() {
+	public void init() throws IOException {
+		logger.write("Init Started\n");
+		logger.flush();
 		this.gameBoard = new Board(this.boardHeight, this.boardWidth, N);
+		logger.write("Init Ended\n");
+		logger.flush();
 	}
 
 	public static void main(String[] args) throws IOException {

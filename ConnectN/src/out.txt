@@ -1,1 +1,8 @@
-InitializedPlayer name is player
+Initialized
+Player name is player
+Incoming Message: player1: aa player2: player
+Finished with the input: player1: aa player2: player
+Incoming Message: 6 7 3 1 10
+Config Recieved - length: 5
+Config Processed
+Init Started

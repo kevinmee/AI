@@ -21,10 +21,16 @@ public class Board {
 	int TIE = 0;
 
 	Board(int height, int width, int N) {
-		this(height, width, N, new int[height][width]);
+		int[][] boardArray = new int[height][width];
+		makeBoard(height, width, N, boardArray);
 	}
 
 	Board(int height, int width, int N, int[][] boardArray) {
+		makeBoard(height, width, N, boardArray);
+	}
+	
+	public void makeBoard(int height, int width, int N, int[][] boardArray) {
+		this.board = boardArray;
 		player1Connections = new int[N];
 		for (int i = 0; i < player1Connections.length; i++)
 			player1Connections[i] = 0;
