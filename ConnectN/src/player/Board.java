@@ -22,6 +22,13 @@ public class Board {
 
 	Board(int height, int width, int N) {
 		int[][] boardArray = new int[height][width];
+		
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				boardArray[i][j] = this.emptyCell;
+			}
+		}
+		
 		makeBoard(height, width, N, boardArray);
 	}
 
@@ -30,6 +37,8 @@ public class Board {
 	}
 	
 	public void makeBoard(int height, int width, int N, int[][] boardArray) {
+		numOfDiscsInColumn = new int[width];
+		
 		this.board = boardArray;
 		player1Connections = new int[N];
 		for (int i = 0; i < player1Connections.length; i++)
@@ -40,12 +49,6 @@ public class Board {
 
 		this.width = width;
 		this.height = height;
-		for (int i = 0; i < height; i++) {
-			for (int j = 0; j < width; j++) {
-				board[i][j] = this.emptyCell;
-			}
-			numOfDiscsInColumn = new int[this.width];
-		}
 	}
 	
 	 public void printBoard(){
