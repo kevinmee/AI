@@ -143,10 +143,10 @@ public class ConnectN_player {
 		ConnectNNode starterNode = new ConnectNNode(4, 2, true, true, board, "");
 		
 		ConnectN_player rp = new ConnectN_player();
-		rp.makeMove(1, 0, 2, board);
-		rp.makeMove(2, 0, 1, board);
-		rp.makeMove(1, 0, 2, board);
-		rp.makeMove(2, 0, 1, board);
+		rp.makeMove(1, 1, 2, board);
+		rp.makeMove(2, 1, 1, board);
+		rp.makeMove(1, 1, 2, board);
+		rp.makeMove(2, 1, 1, board);
 		
 		board.printBoard();
 		
