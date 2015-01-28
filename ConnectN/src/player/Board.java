@@ -45,8 +45,14 @@ public class Board {
 	public Board clone() {
 		Board newBoard = new Board(this.height, this.width, this.theN);
 		
-		newBoard.board = this.board;
-		newBoard.numOfDiscsInColumn = this.numOfDiscsInColumn;
+		newBoard.board = this.board.clone();
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				newBoard.board[i][j] = this.board[i][j];
+			}
+		}
+		
+		newBoard.numOfDiscsInColumn = this.numOfDiscsInColumn.clone();
 		
 		return newBoard;
 	}

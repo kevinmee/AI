@@ -53,10 +53,17 @@ public class ConnectNNode {
 			// Populate all the children
 
 			// Populate normal move children
-			for (int i = 0; i < gameBoard.width; i++) {				
+			for (int i = 0; i < gameBoard.width; i++) {
 				Board childBoard = gameBoard.clone();
+				
+				System.out.println("-------------------------------------------------------------------------------");
+				gameBoard.printBoard();
 				childBoard.dropADiscFromTop(i, player);
-				childBoard.printBoard();
+				gameBoard.printBoard();
+				if (childBoard.board == gameBoard.board || childBoard == gameBoard) {
+					System.out.println("uhoh");
+				}
+				System.out.println("-------------------------------------------------------------------------------");
 				
 				children.add(new ConnectNNode(N, (player % 2) + 1, this.theyCanPop, this.weCanPop, childBoard, i + " 1"));
 				
