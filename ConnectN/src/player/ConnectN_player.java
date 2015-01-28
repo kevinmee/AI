@@ -1,6 +1,7 @@
 package player;
 
 import java.io.BufferedReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
@@ -22,8 +23,10 @@ public class ConnectN_player {
 	boolean canPop = true;
 	boolean otherCanPop = true;
 
-	String playerName = "This is our player name!";
+	String playerName = "player";
 	BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+	
+	static FileWriter logger;
 
 	Board gameBoard;
 
@@ -47,8 +50,13 @@ public class ConnectN_player {
 			// Decide on a new move
 			miniMax(starterNode, boardHeight, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
+			logger.write("best move is |" + starterNode.bestChild.move + "|" + "\n");
+			logger.flush();
+			
 			System.out.println(starterNode.bestChild.move);
 		} else {
+			logger.write("not what I want: " + s + "\n");
+			logger.flush();
 			System.out.println("not what I want");
 		}
 
@@ -76,8 +84,14 @@ public class ConnectN_player {
 	}
 
 	public static void main(String[] args) throws IOException {
+		logger = new FileWriter("out.txt");
+		logger.write("Initialized" + "\n");
+		logger.flush();
+		
 		ConnectN_player rp = new ConnectN_player();
 		System.out.println(rp.playerName);
+		logger.write("Player name is " + rp.playerName + "\n");
+		logger.flush();
 
 		while (true) {
 			rp.processInput();
