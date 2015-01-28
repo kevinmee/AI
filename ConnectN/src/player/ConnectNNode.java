@@ -55,28 +55,20 @@ public class ConnectNNode {
 			// Populate normal move children
 			for (int i = 0; i < gameBoard.width; i++) {
 				Board childBoard = gameBoard.clone();
-				
-				System.out.println("-------------------------------------------------------------------------------");
-				gameBoard.printBoard();
-				childBoard.dropADiscFromTop(i, player);
-				gameBoard.printBoard();
-				if (childBoard.board == gameBoard.board || childBoard == gameBoard) {
-					System.out.println("uhoh");
+				if (childBoard.canDropADiscFromTop(i, player)) {
+					childBoard.dropADiscFromTop(i, player);
+					children.add(new ConnectNNode(N, (player % 2) + 1, this.theyCanPop, this.weCanPop, childBoard, i + " 1"));
 				}
-				System.out.println("-------------------------------------------------------------------------------");
-				
-				children.add(new ConnectNNode(N, (player % 2) + 1, this.theyCanPop, this.weCanPop, childBoard, i + " 1"));
-				
-				childBoard = null;
 			}
 
 			if (this.weCanPop) {
 				// Populate the pop move children
 				for (int i = 0; i < gameBoard.width; i++) {
 					Board childBoard = gameBoard.clone();
-					childBoard.removeADiscFromBottom(i);
-					children.add(new ConnectNNode(N, (player % 2) + 1, this.theyCanPop, false, childBoard, i + " 0"));
-					childBoard = null;
+					if (childBoard.canRemoveADiscFromBottom(i, player)) {
+						childBoard.removeADiscFromBottom(i);
+						children.add(new ConnectNNode(N, (player % 2) + 1, this.theyCanPop, false, childBoard, i + " 0"));
+					}
 				}
 			}
 
@@ -85,7 +77,8 @@ public class ConnectNNode {
 	}
 
 	public int getValue() {
-		return nInARowHeuristic();
+		int res = nInARowHeuristic();
+		return res;
 	}
 
 	// starting heuristic functions

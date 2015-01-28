@@ -179,7 +179,6 @@ public class ConnectN_player {
 	// return bestValue
 
 	private int miniMax(ConnectNNode currentNode, int depth, int alpha, int beta) {
-		currentNode.gameBoard.printBoard();
 		if (depth <= 0 || currentNode.terminal) {
 			return getHeuristic(currentNode);
 		}
@@ -190,8 +189,11 @@ public class ConnectN_player {
 				currentAlpha = Math.max(alpha, miniMax(child, depth - 1, alpha, beta));
 				alpha = Math.max(alpha, currentAlpha);
 
-				if (alpha <= beta) {
+				if (alpha == currentAlpha) {
 					currentNode.setBestChild(child);
+				}
+				
+				if (alpha >= beta) {
 					return beta;
 				}
 			}
@@ -202,10 +204,13 @@ public class ConnectN_player {
 				currentBeta = Math.min(beta, miniMax(child, depth - 1, alpha, beta));
 				beta = Math.min(beta, currentBeta);
 
-				if (beta >= alpha) {
+				if (beta == currentBeta) {
 					currentNode.setBestChild(child);
-					return beta;
 				}
+				
+				if (beta <= alpha) {
+					return beta;
+				} 
 			}
 			return currentBeta;
 		}
