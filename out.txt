@@ -1,0 +1,12 @@
+Initialized
+Player name is player
+Incoming Message: player1: player player2: aa
+Finished with the input: player1: player player2: aa
+Incoming Message: 6 7 3 2 10
+Config Recieved - length: 5
+Config Processed
+Init Started
+Init Ended
+init workedFinished with the input: 6 7 3 2 10
+Incoming Message: 0 1
+Starting Minimax Code
